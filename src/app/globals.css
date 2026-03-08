@@ -1,26 +1,126 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
+/* 
+  NOTE: The @theme directive is required for Tailwind CSS v4. 
+  If your IDE shows an "Unknown at rule" warning, you can safely ignore it 
+  or update your IDE's CSS language server/Tailwind extension.
+*/
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-brand-border: var(--brand-border);
+  --color-border-highlight: var(--border-highlight);
+  --color-text-muted: var(--text-muted);
+  --color-text-secondary: var(--text-secondary);
+
+  --color-brand-accent1: var(--brand-accent1);
+  --color-brand-accent2: var(--brand-accent2);
+  --color-brand-accent3: var(--brand-accent3);
+
+  --font-sans: var(--font-inter), sans-serif;
+  --font-heading: var(--font-outfit), sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #fcfcfe;
+    --foreground: #09090b;
+    --surface: rgba(255, 255, 255, 0.82);
+    --surface-hover: #f6f7fb;
+    --brand-border: rgba(15, 23, 42, 0.1);
+    --border: var(--brand-border);
+    --border-highlight: rgba(124, 58, 237, 0.14);
+    --text-muted: #71717a;
+    --text-secondary: #3f3f46;
+
+    --brand-accent1: #7c3aed;
+    --brand-accent2: #06b6d4;
+    --brand-accent3: #ec4899;
+
+    /* Shadow System */
+    --shadow-premium-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-premium-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --shadow-premium-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+    --shadow-premium-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: rgba(124, 58, 237, 0.5);
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--background);
+    background-image:
+      radial-gradient(circle at top left, rgba(124, 58, 237, 0.08), transparent 32%),
+      radial-gradient(circle at top right, rgba(6, 182, 212, 0.08), transparent 30%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.98));
+    color: var(--foreground);
+    font-family: var(--font-inter), sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: rgba(124, 58, 237, 0.2);
+    color: var(--foreground);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-outfit), sans-serif;
+    letter-spacing: -0.025em;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    background-image: linear-gradient(to bottom right, var(--brand-accent1), var(--brand-accent2));
+  }
+
+  .glass {
+    background-color: color-mix(in srgb, var(--surface) 50%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+  }
+
+  .glass-hover {
+    transition: background-color 0.3s ease;
+  }
+
+  .glass-hover:hover {
+    background-color: color-mix(in srgb, var(--surface-hover) 80%, transparent);
+  }
+
+  .noise {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    opacity: 0.05;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  .mesh-blob {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(80px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+  }
 }
